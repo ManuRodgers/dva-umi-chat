@@ -1,0 +1,14 @@
+.userLogin,
+.userRegister {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.errorMsg {
+  color: red;
+  font-size: 24px
+}
+
+.logo {
+  margin: 20px auto;
+}

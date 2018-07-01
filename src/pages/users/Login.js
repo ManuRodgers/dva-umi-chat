@@ -1,13 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "dva";
+import React, {Component} from "react";
+import {connect} from "dva";
 import PropTypes from "prop-types";
-import { WhiteSpace, WingBlank, Button, List, InputItem } from "antd-mobile";
+import {Button, InputItem, List, WhiteSpace, WingBlank} from "antd-mobile";
 import router from "umi/router";
 import Redirect from "umi/redirect";
 import Logo from "./components/Logo/Logo";
 import styles from "./Users.css";
 
+
 class Login extends Component {
+  changeKeyValuePair = (keyValue, value) => {
+    this.setState({
+      [keyValue]: value
+    });
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -17,22 +24,30 @@ class Login extends Component {
     };
   }
 
-  changeKeyValuePair = (keyValue, value) => {
-    this.setState({
-      [keyValue]: value
+  UNSAFE_componentWillMount() {
+    const {dispatch} = this.props;
+    dispatch({type: "users/initUserAsync"}).then(data => {
+      if (data.currentUser) {
+        const currentUser = data.currentUser;
+        console.log(currentUser);
+
+        dispatch({type: "users/initUserSync", currentUser});
+      } else {
+        return null;
+      }
     });
-  };
+  }
 
   render() {
-    const { username, password, msg } = this.state;
-    const { dispatch, users } = this.props;
-    const { redirectTo } = users;
+    const {username, password, msg} = this.state;
+    const {dispatch, users} = this.props;
+    const {redirectTo, isAuth} = users;
     const reduxMsg = "" || users.msg;
     console.log(this.state);
     return (
       <div className={styles.userLogin}>
-        {redirectTo !== "" ? <Redirect to={redirectTo} /> : null}
-        <Logo />
+        {redirectTo !== "" ? <Redirect to={redirectTo}></Redirect> : null}
+        <Logo/>
         {msg !== "" ? <span className={styles.errorMsg}>{msg}</span> : null}
         {reduxMsg !== "" ? (
           <span className={styles.errorMsg}>{reduxMsg}</span>
@@ -46,7 +61,7 @@ class Login extends Component {
             >
               username:
             </InputItem>
-            <WhiteSpace />
+            <WhiteSpace/>
             <InputItem
               type="password"
               onChange={value => {
@@ -56,7 +71,7 @@ class Login extends Component {
               password:
             </InputItem>
           </List>
-          <WhiteSpace />
+          <WhiteSpace/>
           <Button
             onClick={() => {
               if (!username || !password) {
@@ -75,7 +90,15 @@ class Login extends Component {
           >
             Local Login
           </Button>
-          <WhiteSpace />
+          {/* <Button
+            onClick={async () => {
+              const { status, data } = await axios.get("/api/auth/google");
+            }}
+            type="primary"
+          >
+            Login with Google+
+          </Button>*/}
+          <WhiteSpace/>
           <Button
             onClick={() => {
               return router.push("/users/register");
@@ -95,7 +118,7 @@ Login.propTypes = {
   users: PropTypes.object.isRequired
 };
 
-const mapStateToProps = ({ users }) => ({
+const mapStateToProps = ({users}) => ({
   users
 });
 

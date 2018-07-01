@@ -1,7 +1,6 @@
 export default {
   plugins: [
     "umi-plugin-dva",
-    ["umi-plugin-devHtml"],
     [
       "umi-plugin-routes",
       {
@@ -22,6 +21,9 @@ export default {
       pathRewrite: { "^/api": "" }
     }
   },
+  // exportStatic: {
+  //   htmlSuffix: true
+  // },
 
   hashHistory: false
   // hd: true

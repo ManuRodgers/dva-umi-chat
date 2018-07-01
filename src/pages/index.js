@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "../utils/loading"
 
 class App extends Component {
   render() {

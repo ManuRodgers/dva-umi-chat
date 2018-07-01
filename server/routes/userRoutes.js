@@ -23,19 +23,17 @@ userRoutes.post("/login", (req, res) => {
       }
       const hash = existingUser.password;
       const { username, _id } = existingUser;
-      console.log(hash);
       console.log(username);
-      console.log(_id);
       bcrypt.compare(password, hash, (err, match) => {
         if (err) return console.error(err);
         if (match) {
-          console.log(`matched`);
           // login successfully and set session
-          req.session["userId"] = _id;
+          req.session.userId = _id;
+          console.log(existingUser);
+
           return res.json({ code: 0, existingUser });
         } else {
           // login unsuccessfully
-          console.log(`unmatched`);
           res.json({ code: 1, msg: "wrong password" });
         }
       });
@@ -71,6 +69,34 @@ userRoutes.post("/register", (req, res) => {
   });
 });
 
+userRoutes.post("/bossUpdate", (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields) => {
+    if (err) return console.error(err);
+    const { userId } = req.session;
+    if (!userId) return res.json({ code: 1, msg: "no sessionID please login" });
+    User.findByIdAndUpdate(userId, fields, (err, updatedBoss) => {
+      if (err) return console.error(err);
+      if (!updatedBoss) return res.json({ code: 1, msg: "update boss failed" });
+      return res.json({ code: 0, updatedBoss });
+    });
+  });
+});
+
+userRoutes.post("/geniusUpdate", (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields) => {
+    if (err) return console.error(err);
+    const { userId } = req.session;
+    if (!userId) return res.json({ code: 1, msg: "no sessionID please login" });
+    User.findByIdAndUpdate(userId, fields, (err, updatedGenius) => {
+      if (err) return console.error(err);
+      if (!updatedGenius) return res.json({ code: 1, msg: "update genius failed" });
+      return res.json({ code: 0, updatedGenius });
+    });
+  });
+});
+
 userRoutes.get("/info", (req, res) => {
   const { userId } = req.session;
   if (userId) {
@@ -83,10 +109,21 @@ userRoutes.get("/info", (req, res) => {
           msg: "wrong currentUser Please login again"
         });
       }
+      console.log(currentUser);
+
       return res.json({ code: 0, currentUser });
     });
   } else {
     return res.json({ code: 1, msg: "No session UserId Please login" });
+  }
+});
+userRoutes.get("/googleInfo", (req, res) => {
+  console.log(req.user);
+
+  if (req.user) {
+    res.json({ googleUser: req.user });
+  } else {
+    res.json({ googleUser: "not exist" });
   }
 });
 

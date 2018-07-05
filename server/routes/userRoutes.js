@@ -91,7 +91,8 @@ userRoutes.post("/geniusUpdate", (req, res) => {
     if (!userId) return res.json({ code: 1, msg: "no sessionID please login" });
     User.findByIdAndUpdate(userId, fields, (err, updatedGenius) => {
       if (err) return console.error(err);
-      if (!updatedGenius) return res.json({ code: 1, msg: "update genius failed" });
+      if (!updatedGenius)
+        return res.json({ code: 1, msg: "update genius failed" });
       return res.json({ code: 0, updatedGenius });
     });
   });
@@ -128,11 +129,22 @@ userRoutes.get("/googleInfo", (req, res) => {
 });
 
 userRoutes.get("/list", (req, res) => {
-  User.find({}, (err, users) => {
-    if (err) return console.error(err);
-    if (!users) return res.json({ code: 1, msg: "no any user in database" });
-    return res.json({ code: 0, users });
-  });
+  if (req.query.kind) {
+    let { kind } = req.query;
+    console.log(kind);
+
+    User.find({ kind }, (err, users) => {
+      if (err) return console.error(err);
+      if (!users) return res.json({ code: 1, msg: "no any user in database" });
+      return res.json({ code: 0, users });
+    });
+  } else {
+    User.find({}, (err, users) => {
+      if (err) return console.error(err);
+      if (!users) return res.json({ code: 1, msg: "no any user in database" });
+      return res.json({ code: 0, users });
+    });
+  }
 });
 
 module.exports = userRoutes;

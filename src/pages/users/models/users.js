@@ -71,6 +71,8 @@ export default {
       };
     },
     initUserSync(state, { currentUser }) {
+      console.log(currentUser);
+
       return {
         ...state,
         redirectTo: getRedirect({

@@ -3,7 +3,7 @@ import { connect } from "dva";
 import router from "umi/router";
 import { TabBar, NavBar } from "antd-mobile";
 import PropTypes from "prop-types";
-import styles from "../Users.css"
+import styles from "../Users.css";
 
 class DashboardLayout extends Component {
   render() {
@@ -52,13 +52,12 @@ class DashboardLayout extends Component {
         <NavBar style={{ position: "sticky", width: "100%" }}>
           {currentNav.title}
         </NavBar>
-        <div className="mainContent">main content</div>
+        <div className="mainContent">{children}</div>
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
           barTintColor="white"
           tabBarPosition="bottom"
-          className={styles.amT}
         >
           {filteredNavList.map((item, index) => {
             return (
@@ -88,7 +87,8 @@ class DashboardLayout extends Component {
 
 DashboardLayout.propTypes = {
   children: PropTypes.object.isRequired,
-  users: PropTypes.object.isRequired
+  users: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = ({ users }) => ({

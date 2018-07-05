@@ -1,15 +1,13 @@
 export default function getRedirect({ kind, avatar }) {
-  let url = "";
   if (kind === "genius") {
     if (!avatar || avatar === "") {
-      url = "geniusInfo";
+      return "geniusInfo";
     }
-    url = "dashboard/genius";
+    return "dashboard/genius";
   } else {
     if (!avatar || avatar === "") {
-      url = "bossInfo";
+      return "bossInfo";
     }
-    url = "dashboard/boss";
+    return "dashboard/boss";
   }
-  return url;
 }

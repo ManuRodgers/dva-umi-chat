@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "dva";
 import router from "umi/router";
-import { TabBar, NavBar } from "antd-mobile";
+import { TabBar, NavBar, Flex } from "antd-mobile";
 import PropTypes from "prop-types";
 import styles from "../Users.css";
+import { relative } from "upath";
 
 class DashboardLayout extends Component {
   render() {
@@ -48,38 +49,49 @@ class DashboardLayout extends Component {
     console.log(currentNav);
 
     return (
-      <div className={styles.userDashboard}>
-        <NavBar style={{ position: "sticky", width: "100%" }}>
-          {currentNav.title}
-        </NavBar>
+      <div style={{position: "relative"}} className={styles.userDashboard}>
+        <Flex>
+          <Flex.Item>
+            <NavBar style={{ position: "sticky", width: "100%" }}>
+              {currentNav.title}
+            </NavBar>
+          </Flex.Item>
+        </Flex>
+
         <div className="mainContent">{children}</div>
-        <TabBar
-          unselectedTintColor="#949494"
-          tintColor="#33A3F4"
-          barTintColor="white"
-          tabBarPosition="bottom"
-        >
-          {filteredNavList.map((item, index) => {
-            return (
-              <TabBar.Item
-                title={item.text}
-                key={item.text}
-                icon={{
-                  uri: require(`../../../assets/tabBarImages/${item.icon}.png`)
-                }}
-                selectedIcon={{
-                  uri: require(`../../../assets/tabBarImages/${
-                    item.icon
-                  }-active.png`)
-                }}
-                selected={pathname === item.path}
-                onPress={() => {
-                  return router.push(item.path);
-                }}
-              />
-            );
-          })}
-        </TabBar>
+        <Flex style={{ position: "absolute", left: "0px", bottom: "0px",width: "100%" }}>
+          <Flex.Item>
+            <TabBar
+              unselectedTintColor="#949494"
+              tintColor="#33A3F4"
+              barTintColor="white"
+              tabBarPosition="bottom"
+            >
+              {filteredNavList.map((item, index) => {
+                return (
+                  <TabBar.Item
+                    title={item.text}
+                    key={item.text}
+                    icon={{
+                      uri: require(`../../../assets/tabBarImages/${
+                        item.icon
+                      }.png`)
+                    }}
+                    selectedIcon={{
+                      uri: require(`../../../assets/tabBarImages/${
+                        item.icon
+                      }-active.png`)
+                    }}
+                    selected={pathname === item.path}
+                    onPress={() => {
+                      return router.push(item.path);
+                    }}
+                  />
+                );
+              })}
+            </TabBar>
+          </Flex.Item>
+        </Flex>
       </div>
     );
   }

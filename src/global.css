@@ -3,3 +3,6 @@ html, body, :global(#root) {
   height: 100%;
 }
 
+.am-tabs-tab-bar-wrap {
+  width: 100%;
+}

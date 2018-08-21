@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Card, Flex, WhiteSpace } from "antd-mobile";
 import axios from "axios";
+import styles from "../Users.css";
 
 class Genius extends Component {
   constructor(props) {
@@ -21,10 +23,41 @@ class Genius extends Component {
   }
 
   render() {
-    const { bossList } = this.state;
+    const { bossList, msg } = this.state;
     console.log(this.state);
 
-    return <div>Genius</div>;
+    return (
+      <div>
+        {msg !== "" ? <span className={styles.errorMsg}>{msg}</span> : null}
+        {bossList.length === 0 ? (
+          <span>There is not boss on the market looking for some geniuses</span>
+        ) : (
+          <div>
+            {bossList.map((boss, index) => {
+              return (
+                <Flex key={boss.company}>
+                  <Flex.Item>
+                    <Card>
+                      <Card.Header
+                        thumb={require(`../../../assets/avatarImages/${
+                          boss.avatar
+                        }.png`)}
+                        title={boss.username}
+                        extra={boss.title}
+                      />
+                      <Card.Body style={{}}>
+                        the job description: {boss.description}
+                      </Card.Body>
+                      <Card.Footer content={boss.company} extra={boss.money} />
+                    </Card>
+                  </Flex.Item>
+                </Flex>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
   }
 }
 
